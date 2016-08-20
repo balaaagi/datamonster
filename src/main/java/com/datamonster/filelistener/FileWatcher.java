@@ -1,4 +1,4 @@
-package com.datamonster.services.listener;
+package com.datamonster.services.filelistener;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,16 +9,17 @@ import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.List;
-import com.datamonster.services.data.Indexer;
+import com.datamonster.indexinghandlers.Indexer;
+import static com.datamonster.utils.DataMonsterQueryConstants.WATCH_FOLDER;
 
 public class FileWatcher {
 
-	public static final String REMOTE_FOLDER = "/Users/balaaagi/Devlogs/DataMonster/back_in_time_dataset";
+	
 	public String listenerActive="Y";
 	public WatchKey watchKey;	
 	public WatchService watcher;
 	public void startListening() {
-		Path watchDirectory = Paths.get(REMOTE_FOLDER);
+		Path watchDirectory = Paths.get(WATCH_FOLDER);
 //		this.listenerActive = "Y";
 		
 		while(listenerActive.equals("Y")) {
@@ -30,11 +31,11 @@ public class FileWatcher {
 				List<WatchEvent<?>> events = watchKey.pollEvents();
 				for (WatchEvent event : events) {
 					if (event.kind() == StandardWatchEventKinds.ENTRY_CREATE) {
-						File incomingFile = new File(REMOTE_FOLDER+"/"+event.context().toString());
+						File incomingFile = new File(WATCH_FOLDER+"/"+event.context().toString());
 						FileParser fileParser = new FileParser(incomingFile);
 						Indexer indexer = new Indexer();
 						indexer.persistFile(incomingFile, fileParser.getproductUrl(), fileParser.getVersion(), fileParser.getStatusCode());
-						incomingFile.delete();
+						// incomingFile.delete();
 					}
 				}
 

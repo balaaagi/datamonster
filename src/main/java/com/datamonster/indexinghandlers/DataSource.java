@@ -1,4 +1,4 @@
-package com.datamonster.services.data;
+package com.datamonster.indexinghandlers;
 
 import java.io.File;
 import java.util.*;
@@ -6,13 +6,23 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.io.UnsupportedEncodingException;
-
+import java.net.URLEncoder;
+import static com.datamonster.utils.DataMonsterQueryConstants.DB_SERVICE_URL;
+import static com.datamonster.utils.DataMonsterQueryConstants.USER_AGENT;
 
 public class DataSource {
-	private String dbServiceURL="http://localhost:3000";
-	private final String USER_AGENT = "Mozilla/5.0";
+	private String dbServiceURL=DB_SERVICE_URL;
+	
 	public void insertFileInDb(String productUrl, String version, int statusCode, File newFile) {
-		String urlID = UUID.nameUUIDFromBytes(productUrl.getBytes()).toString();
+		String productUrlEncoded=productUrl;
+		try{
+			productUrlEncoded=URLEncoder.encode(productUrl, "UTF-8");
+			
+		}catch(UnsupportedEncodingException e){
+			System.out.println("Exception while Encoding the URL from file!");
+
+		}
+		String urlID = UUID.nameUUIDFromBytes(productUrlEncoded.getBytes()).toString();
 
 		try{
 		dbServiceURL=dbServiceURL+"/addIndex?searchurl="+urlID+"&filename="+newFile.getName().toString().split("-")[0]+"&timestamp="+version;

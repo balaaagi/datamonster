@@ -1,4 +1,4 @@
-package com.datamonster.services.data;
+package com.datamonster.indexinghandlers;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,9 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import static com.datamonster.utils.DataMonsterQueryConstants.WATCH_FOLDER;
 
 public class Indexer {
-	private static String PROCESSED_FOLDER = "/Users/balaaagi/Devlogs/DataMonster/Processed";
+	
 
 	public void persistFile(File newFile, String productUrl,
 			String version, int statusCode) {
@@ -17,7 +18,7 @@ public class Indexer {
 		
 		try {
 			fileStream = new FileInputStream(newFile);
-			processedfile = new File(PROCESSED_FOLDER + "/"+ newFile.getName());
+			processedfile = new File(WATCH_FOLDER + "/"+ newFile.getName());
 			// writeStreamToFile(fileStream, processedfile);
 			
 			DataSource mongoDb = new DataSource();

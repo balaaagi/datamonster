@@ -21,7 +21,7 @@ import javax.ws.rs.core.UriInfo;
  */
 @Path("/")
 @Encoded
-public class MyResource {
+public class DataMonsterFileQueryService {
 
     /**
      * Method handling HTTP GET requests. The returned object will be sent
@@ -35,28 +35,40 @@ public class MyResource {
         return "Got it!";
     }
 
+    // @GET
+    // @Path("search")
+    // @Produces(MediaType.TEXT_HTML)
+    // public Response searchResuts(@QueryParam("url") String url){
+    //     // return "<b>"+url+"</b>"
+    //     Search newSearch=new Search();
+    //     // System.out.println(url);
+    //     // return Response.status(200).entity("<html> " + "<title>" + "File Search Response" + "</title><body><b><a href=\""+url+"\">"+"Click Here </a></b></body></html>").build();
+    //     return Response.status(200).entity(newSearch.searchURL(url)).build();
+    //     // return "<a href=\"http://stackoverflow.com\"> Hellow</a>";
+    // }
+
     @GET
     @Path("search")
     @Produces(MediaType.TEXT_HTML)
-    public Response searchResuts(@QueryParam("url") String url){
+    public Response searchResuts(@QueryParam("url") String url,
+                                @QueryParam("limit") String limit){
         // return "<b>"+url+"</b>"
         Search newSearch=new Search();
         // System.out.println(url);
         // return Response.status(200).entity("<html> " + "<title>" + "File Search Response" + "</title><body><b><a href=\""+url+"\">"+"Click Here </a></b></body></html>").build();
-        return Response.status(200).entity(newSearch.searchURL(url)).build();
+        return Response.status(200).entity(newSearch.searchURLWithLimits(url,limit)).build();
         // return "<a href=\"http://stackoverflow.com\"> Hellow</a>";
     }
 
     @GET
     @Path("raw")
-    @Produces(MediaType.TEXT_HTML)
+    @Produces(MediaType.TEXT_PLAIN)
     
-    public Response searchForVersion(@QueryParam("url")String url,
+    public String searchForVersion(@QueryParam("url")String url,
                                      @QueryParam("version") String version){
-    // public Response searchForVersion(@Context UriInfo uriInfo){
+    
         Search newSearch=new Search();
-        // String url=uriInfo.getQueryParameters().getFirst("url");
-        // String version=uriInfo.getQueryParameters().getFirst("version");
-        return Response.status(200).entity(newSearch.searchRawVersion(url,version)).build();
+     
+        return newSearch.searchRawVersion(url,version);
     }
 }
