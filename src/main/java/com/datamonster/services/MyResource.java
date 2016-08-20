@@ -4,11 +4,15 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.*;
+import javax.ws.rs.QueryParam;
+import com.datamonster.finder.Search;
 
 /**
  * Root resource (exposed at "myresource" path)
  */
-@Path("myresource")
+@Path("/")
 public class MyResource {
 
     /**
@@ -21,5 +25,24 @@ public class MyResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String getIt() {
         return "Got it!";
+    }
+
+    @GET
+    @Path("search")
+    @Produces(MediaType.TEXT_HTML)
+    public Response searchResuts(@QueryParam("url") String url){
+        // return "<b>"+url+"</b>"
+        Search newSearch=new Search();
+        // return Response.status(200).entity("<html> " + "<title>" + "File Search Response" + "</title><body><b><a href=\""+url+"\">"+"Click Here </a></b></body></html>").build();
+        return Response.status(200).entity(newSearch.searchURL(url)).build();
+        // return "<a href=\"http://stackoverflow.com\"> Hellow</a>";
+    }
+
+    @GET
+    @Path("raw")
+    @Produces(MediaType.TEXT_HTML)
+    public Response searchForVersion(@QueryParam("url") String url,@QueryParam("version") String version){
+        Search newSearch=new Search();
+        return Response.status(200).entity(newSearch.searchRawVersion(url,version)).build();
     }
 }
