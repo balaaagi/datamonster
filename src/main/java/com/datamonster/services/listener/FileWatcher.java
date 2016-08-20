@@ -38,13 +38,13 @@ public class FileWatcher {
 					}
 				}
 
-				boolean validKey = watchKey.reset();
-	            System.out.println("Key reset");
-	            System.out.println("");
-	            if (! validKey) {
-	                System.out.println("Invalid key");
-	                break; // infinite for loop
-	            }
+				// boolean validKey = watchKey.reset();
+	   //          System.out.println("Key reset");
+	   //          System.out.println("");
+	   //          if (! validKey) {
+	   //              System.out.println("Invalid key");
+	   //              break; // infinite for loop
+	   //          }
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

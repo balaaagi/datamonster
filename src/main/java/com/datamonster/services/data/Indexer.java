@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class Indexer {
-	private static String PROCESSED_FOLDER = "/Users/balaaagi/Devlogs/DataMonster/Processed/";
+	private static String PROCESSED_FOLDER = "/Users/balaaagi/Devlogs/DataMonster/Processed";
 
 	public void persistFile(File newFile, String productUrl,
 			String version, int statusCode) {

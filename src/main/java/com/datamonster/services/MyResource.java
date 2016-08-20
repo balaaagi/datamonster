@@ -10,6 +10,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.PathParam;
 import com.datamonster.finder.Search;
 import javax.ws.rs.Encoded;
+import javax.ws.rs.core.Context;
+
+import javax.ws.rs.core.UriInfo;
+
 // import javax.ws.rs.Decoded; 
 
 /**
@@ -46,8 +50,13 @@ public class MyResource {
     @GET
     @Path("raw")
     @Produces(MediaType.TEXT_HTML)
-    public Response searchForVersion(@QueryParam("url") String url,@QueryParam("version") String version){
+    
+    public Response searchForVersion(@QueryParam("url")String url,
+                                     @QueryParam("version") String version){
+    // public Response searchForVersion(@Context UriInfo uriInfo){
         Search newSearch=new Search();
+        // String url=uriInfo.getQueryParameters().getFirst("url");
+        // String version=uriInfo.getQueryParameters().getFirst("version");
         return Response.status(200).entity(newSearch.searchRawVersion(url,version)).build();
     }
 }
