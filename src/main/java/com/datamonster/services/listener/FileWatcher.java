@@ -13,29 +13,39 @@ import com.datamonster.services.data.Indexer;
 
 public class FileWatcher {
 
-	public static final String REMOTE_FOLDER = "C:\\Users\\User\\Desktop\\incomingFolder";
+	public static final String REMOTE_FOLDER = "/Users/balaaagi/Devlogs/DataMonster/back_in_time_dataset";
 	public String listenerActive="Y";
-	
+	public WatchKey watchKey;	
+	public WatchService watcher;
 	public void startListening() {
 		Path watchDirectory = Paths.get(REMOTE_FOLDER);
 //		this.listenerActive = "Y";
 		
 		while(listenerActive.equals("Y")) {
 			try {
-				WatchService watcher = watchDirectory.getFileSystem().newWatchService();
+				watcher = watchDirectory.getFileSystem().newWatchService();
 				watchDirectory.register(watcher, StandardWatchEventKinds.ENTRY_CREATE);
-				WatchKey watchKey = watcher.take();
+				watchKey = watcher.take();
 				
 				List<WatchEvent<?>> events = watchKey.pollEvents();
 				for (WatchEvent event : events) {
 					if (event.kind() == StandardWatchEventKinds.ENTRY_CREATE) {
-						File incomingFile = new File(REMOTE_FOLDER+"\\"+event.context().toString());
+						File incomingFile = new File(REMOTE_FOLDER+"/"+event.context().toString());
 						FileParser fileParser = new FileParser(incomingFile);
 						Indexer indexer = new Indexer();
 						indexer.persistFile(incomingFile, fileParser.getproductUrl(), fileParser.getVersion(), fileParser.getStatusCode());
 						incomingFile.delete();
 					}
 				}
+
+				boolean validKey = watchKey.reset();
+	            System.out.println("Key reset");
+	            System.out.println("");
+	            if (! validKey) {
+	                System.out.println("Invalid key");
+	                break; // infinite for loop
+	            }
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -46,7 +56,8 @@ public class FileWatcher {
 		}
 	}
 	
-	public void stopListening() {
+	public void stopListening() throws IOException {
+        watcher.close();
 		this.listenerActive = "N";
 	}
 }

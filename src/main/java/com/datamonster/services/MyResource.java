@@ -7,12 +7,16 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.*;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.PathParam;
 import com.datamonster.finder.Search;
+import javax.ws.rs.Encoded;
+// import javax.ws.rs.Decoded; 
 
 /**
  * Root resource (exposed at "myresource" path)
  */
 @Path("/")
+@Encoded
 public class MyResource {
 
     /**
@@ -33,6 +37,7 @@ public class MyResource {
     public Response searchResuts(@QueryParam("url") String url){
         // return "<b>"+url+"</b>"
         Search newSearch=new Search();
+        // System.out.println(url);
         // return Response.status(200).entity("<html> " + "<title>" + "File Search Response" + "</title><body><b><a href=\""+url+"\">"+"Click Here </a></b></body></html>").build();
         return Response.status(200).entity(newSearch.searchURL(url)).build();
         // return "<a href=\"http://stackoverflow.com\"> Hellow</a>";

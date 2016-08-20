@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class Indexer {
-	private static String PROCESSED_FOLDER = "C:\\Users\\User\\Desktop\\incomingFolder\\processed";
+	private static String PROCESSED_FOLDER = "/Users/balaaagi/Devlogs/DataMonster/Processed/";
 
 	public void persistFile(File newFile, String productUrl,
 			String version, int statusCode) {
@@ -17,8 +17,8 @@ public class Indexer {
 		
 		try {
 			fileStream = new FileInputStream(newFile);
-			processedfile = new File(PROCESSED_FOLDER + "\\"+ newFile.getName());
-			writeStreamToFile(fileStream, processedfile);
+			processedfile = new File(PROCESSED_FOLDER + "/"+ newFile.getName());
+			// writeStreamToFile(fileStream, processedfile);
 			
 			DataSource mongoDb = new DataSource();
 			mongoDb.insertFileInDb(productUrl, version, statusCode, newFile);
