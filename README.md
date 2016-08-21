@@ -4,8 +4,11 @@
 
 
 ### Getting Started
-```bash
+
 Please change the WATCH_FOLDER in com.datamonster.utils.DataMonsterQueryConstants 
+
+```bash
+
 
 $ mvn clean test
 
