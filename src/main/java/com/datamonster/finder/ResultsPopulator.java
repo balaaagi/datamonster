@@ -102,7 +102,7 @@ public class ResultsPopulator{
 		// FileWatcher purgeFileWatcher=new FileWatcher();
 		int sizeOfResults=resultArray.size();
 		System.out.println("Size"+sizeOfResults);
-        for(int i=sizeOfResults-Integer.parseInt(toKeep);i<sizeOfResults;i++){
+        for(int i=Integer.parseInt(toKeep);i<sizeOfResults;i++){
  			
 
             JSONObject singleFileDetails=(JSONObject)resultArray.get(i);

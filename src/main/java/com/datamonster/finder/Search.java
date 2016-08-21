@@ -20,57 +20,6 @@ public class Search{
     // private String sampleFileResults="<b><a href=\""+fileName+"\">"+fileName +"</a></b>";
     private String fileResults="No Files Found";
 	
-	// public String searchURL(String url){
-	// 	String urls;
-	// // // 	//TO DO
-	// // 	try{
-	// // 		urls=URLEncoder.encode(url, "UTF-8");
-	// // 	// urls=java.net.URLDecoder.encode(url, "UTF-8");	
-	// // }catch(UnsupportedEncodingException e){
-	// // 	urls=url;
-	// // }
-	// 	String urlID = UUID.nameUUIDFromBytes(url.getBytes()).toString();
-	// 	try{
-	// 	dbServiceURL=dbServiceURL+"/findFileNames?searchurl="+urlID;
-	// 	System.out.println(dbServiceURL);
-	// 	URL obj = new URL(dbServiceURL);
-	// 	HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-	// 	con.setRequestMethod("GET");
-
-
-	// 	con.setRequestProperty("User-Agent", USER_AGENT);
-
-	// 	int responseCode = con.getResponseCode();
-	// 	System.out.println("\nSending 'GET' request to URL : " + url);
-	// 	System.out.println("Response Code : " + responseCode);
-
-	// 	BufferedReader in = new BufferedReader(
-	// 	        new InputStreamReader(con.getInputStream()));
-	// 	String inputLine;
-	// 	StringBuffer response = new StringBuffer();
-
-	// 	while ((inputLine = in.readLine()) != null) {
-	// 		response.append(inputLine);
-	// 	}
-	// 	in.close();
-
-	// 	//print result
-	// 	// System.out.println(response.toString());
-	// 	ResultsPopulator res=new ResultsPopulator();
-	// 	fileResults=res.populateResultforSearchUrl(response.toString());
-
-
-	// 	}catch(IOException ef){
-	// 		ef.printStackTrace();
-	// 	}catch(Exception e){
-
-	// 		e.printStackTrace();
-	// 	}
-
-	// 	return firstHTML+fileResults+"<br>"+urlID+"<br>"+url+lastHTML;
-	// }
-
-
 	public String searchURLWithLimits(String url,String limits){
 		String urls;
 	// // 	//TO DO
@@ -85,7 +34,7 @@ public class Search{
 			if(limits!=null)
 				dbServiceURL=dbServiceURL+"/findFileNamesWithLimits?searchurl="+urlID+"&limitTo="+limits;
 			else
-				dbServiceURL=dbServiceURL+"/findFileNames?searchurl="+urlID;
+				dbServiceURL=dbServiceURL+"/findFileNamesWithLimits?searchurl="+urlID+"&limitTo="+3;
 		
 		URL obj = new URL(dbServiceURL);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -121,7 +70,7 @@ public class Search{
 			e.printStackTrace();
 		}
 
-		return firstHTML+fileResults+"<br>"+urlID+"<br>"+url+lastHTML;
+		return firstHTML+fileResults+lastHTML;
 	}
 	public String searchRawVersion(String url,String version){
 		
@@ -168,17 +117,10 @@ public class Search{
 
 	public String purgeAndKeep(String url,String toKeep){
 		String urls;
-	// // 	//TO DO
-	// 	try{
-	// 		urls=URLEncoder.encode(url, "UTF-8");
-	// 	// urls=java.net.URLDecoder.encode(url, "UTF-8");	
-	// }catch(UnsupportedEncodingException e){
-	// 	urls=url;
-	// }
 		System.out.println("Coming for purge");
 		String urlID = UUID.nameUUIDFromBytes(url.getBytes()).toString();
 		try{
-			dbServiceURL=dbServiceURL+"/findFileNames?searchurl="+urlID;
+			dbServiceURL=dbServiceURL+"/findFileNamesForPurge?searchurl="+urlID+"&toKeep="+toKeep;
 		
 		URL obj = new URL(dbServiceURL);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();

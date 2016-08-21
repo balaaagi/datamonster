@@ -35,29 +35,18 @@ public class DataMonsterFileQueryService {
         return "Got it!";
     }
 
-    // @GET
-    // @Path("search")
-    // @Produces(MediaType.TEXT_HTML)
-    // public Response searchResuts(@QueryParam("url") String url){
-    //     // return "<b>"+url+"</b>"
-    //     Search newSearch=new Search();
-    //     // System.out.println(url);
-    //     // return Response.status(200).entity("<html> " + "<title>" + "File Search Response" + "</title><body><b><a href=\""+url+"\">"+"Click Here </a></b></body></html>").build();
-    //     return Response.status(200).entity(newSearch.searchURL(url)).build();
-    //     // return "<a href=\"http://stackoverflow.com\"> Hellow</a>";
-    // }
+ 
 
     @GET
     @Path("search")
     @Produces(MediaType.TEXT_HTML)
     public Response searchResuts(@QueryParam("url") String url,
                                 @QueryParam("limit") String limit){
-        // return "<b>"+url+"</b>"
+        
         Search newSearch=new Search();
-        // System.out.println(url);
-        // return Response.status(200).entity("<html> " + "<title>" + "File Search Response" + "</title><body><b><a href=\""+url+"\">"+"Click Here </a></b></body></html>").build();
+        
         return Response.status(200).entity(newSearch.searchURLWithLimits(url,limit)).build();
-        // return "<a href=\"http://stackoverflow.com\"> Hellow</a>";
+        
     }
 
     @GET
