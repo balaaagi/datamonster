@@ -46,6 +46,8 @@ At Indix we do a lot of crawling to get the product data, along with their lates
 
 Java
 
+The indexes are stored in MongoDB. Check [indexDBStorage](https://github.com/balaaagi/DataMonsterindexDBStorage)
+
 
 ### To Do 
 ...later...
