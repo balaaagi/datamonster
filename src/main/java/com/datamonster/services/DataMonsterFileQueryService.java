@@ -51,14 +51,15 @@ public class DataMonsterFileQueryService {
 
     @GET
     @Path("raw")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_HTML)
     
-    public String searchForVersion(@QueryParam("url")String url,
+    public Response searchForVersion(@QueryParam("url")String url,
                                      @QueryParam("version") String version){
     
         Search newSearch=new Search();
      
-        return newSearch.searchRawVersion(url,version);
+        return Response.status(200).entity(newSearch.searchRawVersion(url,version)).build();
+        // return newSearch.searchRawVersion(url,version);
     }
 
     @GET
