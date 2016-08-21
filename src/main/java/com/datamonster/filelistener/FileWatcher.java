@@ -2,6 +2,8 @@ package com.datamonster.filelistener;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardWatchEventKinds;
@@ -9,6 +11,8 @@ import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.List;
+
+import com.datamonster.finder.Search;
 import com.datamonster.indexinghandlers.Indexer;
 import static com.datamonster.utils.DataMonsterQueryConstants.WATCH_FOLDER;
 
@@ -47,7 +51,14 @@ public class FileWatcher {
 						FileParser fileParser = new FileParser(incomingFile);
 						Indexer indexer = new Indexer();
 						indexer.persistFile(incomingFile, fileParser.getproductUrl(), fileParser.getVersion(), fileParser.getStatusCode());
-						// incomingFile.delete();
+						Search search = new Search();
+						String productUrlEncoded=fileParser.getproductUrl();
+						try{
+							productUrlEncoded=URLEncoder.encode(fileParser.getproductUrl(), "UTF-8");			
+						}catch(UnsupportedEncodingException e){
+							System.out.println("Exception while Encoding the URL from file!");
+						}
+						search.purgeAndKeep(productUrlEncoded, "3");
 					}
 				}
 

@@ -4,12 +4,10 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.*;
 import java.io.*;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.ProtocolException;
 import java.net.URL;
-import java.io.UnsupportedEncodingException;
+
 import static com.datamonster.utils.DataMonsterQueryConstants.DB_SERVICE_URL;
 import static com.datamonster.utils.DataMonsterQueryConstants.USER_AGENT;
 
@@ -21,20 +19,30 @@ public class Search{
     private String fileResults="No Files Found";
 	
 	public String searchURLWithLimits(String url,String limits){
+
+		//print result
+		// System.out.println(response.toString());
+		try {
+			StringBuffer response = getSearchResultsFromDb(url,limits);
+			ResultsPopulator res=new ResultsPopulator();
+			fileResults=res.populateResultforSearchUrl(response.toString());
+
+		}catch(Exception e){
+
+			e.printStackTrace();
+		}
+
+		return firstHTML+fileResults+lastHTML;
+	}
+	private StringBuffer getSearchResultsFromDb(String url, String limits) throws IOException {
 		String urls;
-	// // 	//TO DO
-	// 	try{
-	// 		urls=URLEncoder.encode(url, "UTF-8");
-	// 	// urls=java.net.URLDecoder.encode(url, "UTF-8");	
-	// }catch(UnsupportedEncodingException e){
-	// 	urls=url;
-	// }
+
 		String urlID = UUID.nameUUIDFromBytes(url.getBytes()).toString();
-		try{
-			if(limits!=null)
-				dbServiceURL=dbServiceURL+"/findFileNamesWithLimits?searchurl="+urlID+"&limitTo="+limits;
-			else
-				dbServiceURL=dbServiceURL+"/findFileNamesWithLimits?searchurl="+urlID+"&limitTo="+3;
+
+		if(limits!=null)
+			dbServiceURL=dbServiceURL+"/findFileNamesWithLimits?searchurl="+urlID+"&limitTo="+limits;
+		else
+			dbServiceURL=dbServiceURL+"/findFileNames?searchurl="+urlID;
 		
 		URL obj = new URL(dbServiceURL);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -57,20 +65,7 @@ public class Search{
 		}
 		in.close();
 
-		//print result
-		// System.out.println(response.toString());
-		ResultsPopulator res=new ResultsPopulator();
-		fileResults=res.populateResultforSearchUrl(response.toString());
-
-
-		}catch(IOException ef){
-			ef.printStackTrace();
-		}catch(Exception e){
-
-			e.printStackTrace();
-		}
-
-		return firstHTML+fileResults+lastHTML;
+		return response;
 	}
 	public String searchRawVersion(String url,String version){
 		

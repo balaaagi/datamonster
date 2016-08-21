@@ -88,6 +88,7 @@ public class ResultsPopulator{
 	public String purgeAndKeep(String responseString,String toKeep){
 		JSONParser parser=new JSONParser();
 		JSONObject resultsObject=null;
+
 		try{
 
 			resultsObject=(JSONObject) parser.parse(responseString);	
