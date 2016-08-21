@@ -4,10 +4,13 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import java.io.File;
 import java.lang.StringBuilder;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.FileReader;
+import java.lang.Integer;
+import com.datamonster.filelistener.FileWatcher;
 import static com.datamonster.utils.DataMonsterQueryConstants.WATCH_FOLDER;
 
 
@@ -32,9 +35,6 @@ public class ResultsPopulator{
  			output=output+"<tr>";
 
             JSONObject singleFileDetails=(JSONObject)resultArray.get(i);
-			System.out.println((String)singleFileDetails.get("url"));
-			System.out.println((String)singleFileDetails.get("filename"));
-			System.out.println(singleFileDetails.get("timestamp").toString());
 			output=output+"<td>"+singleFileDetails.get("filename").toString()+"-"+singleFileDetails.get("timestamp").toString()+".html"+"</td><td>"+singleFileDetails.get("timestamp").toString()+"</td>";
 			output=output+"</tr>";        
                 
@@ -42,6 +42,8 @@ public class ResultsPopulator{
 		return output;
 		
 	}
+
+
 
 	public String populateResultforSearchRawUrl(String responseString){
 		JSONParser parser=new JSONParser();
@@ -63,16 +65,12 @@ public class ResultsPopulator{
 
             JSONObject singleFileDetails=(JSONObject)resultArray.get(0);
             String outputFileName=singleFileDetails.get("filename").toString()+"-"+singleFileDetails.get("timestamp").toString()+".html";
-			// System.out.println((String)singleFileDetails.get("url"));
-			// System.out.println((String)singleFileDetails.get("filename"));
-			// System.out.println(singleFileDetails.get("timestamp").toString());
-			// output=output+"<td>"+singleFileDetails.get("filename").toString()+"-"+singleFileDetails.get("timestamp").toString()+".html"+"</td><td>"+singleFileDetails.get("timestamp").toString()+"</td>";
-			// output=output+"</tr>";        
+		      
             							        
             StringBuilder contentBuilder = new StringBuilder();
 			try {
     		BufferedReader in = new BufferedReader(new FileReader(WATCH_FOLDER+"/"+outputFileName));
-    			// 1eae077003ac2e788ddb4d91e5c69fcf-1470547058547.html"));
+    			
 			    String str=in.readLine();
 			    while ((str = in.readLine()) != null) {
 			        contentBuilder.append(str);
@@ -83,6 +81,45 @@ public class ResultsPopulator{
 			}
 			output =contentBuilder.toString();
 			// System.out.println(output);
+		return output;
+		
+	}
+
+	public String purgeAndKeep(String responseString,String toKeep){
+		JSONParser parser=new JSONParser();
+		JSONObject resultsObject=null;
+		try{
+
+			resultsObject=(JSONObject) parser.parse(responseString);	
+		}catch(ParseException e){
+			e.printStackTrace();
+		}
+		String output="<b>Purged Files</b><br><table><tr><th>FileName</th><th>Timestamp</th></tr>";
+		
+
+		JSONArray resultArray=(JSONArray)resultsObject.get("results");
+		
+		// FileWatcher purgeFileWatcher=new FileWatcher();
+		int sizeOfResults=resultArray.size();
+		System.out.println("Size"+sizeOfResults);
+        for(int i=sizeOfResults-Integer.parseInt(toKeep);i<sizeOfResults;i++){
+ 			
+
+            JSONObject singleFileDetails=(JSONObject)resultArray.get(i);
+            String fileName=singleFileDetails.get("filename").toString()+"-"+singleFileDetails.get("timestamp").toString()+".html";
+			System.out.println("The file that is to be deleted.."+fileName);
+			File toBePurgedFile=new File(WATCH_FOLDER+"/"+fileName);
+			
+            if(toBePurgedFile.delete()){
+            	output=output+"<tr>";
+            	output=output+"<td>"+fileName+"</td><td>"+singleFileDetails.get("timestamp").toString()+"</td>";
+				output=output+"</tr>";        	
+             }else{
+             	output=output+"<tr>";
+            	output=output+"<td>"+fileName+"</td><td>Not Delete"+"</td>";
+				output=output+"</tr>";        	
+             }    
+            }
 		return output;
 		
 	}

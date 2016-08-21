@@ -86,7 +86,7 @@ public class Search{
 				dbServiceURL=dbServiceURL+"/findFileNamesWithLimits?searchurl="+urlID+"&limitTo="+limits;
 			else
 				dbServiceURL=dbServiceURL+"/findFileNames?searchurl="+urlID;
-		System.out.println(dbServiceURL);
+		
 		URL obj = new URL(dbServiceURL);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		con.setRequestMethod("GET");
@@ -95,7 +95,7 @@ public class Search{
 		con.setRequestProperty("User-Agent", USER_AGENT);
 
 		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'GET' request to URL : " + url);
+		System.out.println("\nSending 'GET' request to URL : " + dbServiceURL);
 		System.out.println("Response Code : " + responseCode);
 
 		BufferedReader in = new BufferedReader(
@@ -131,7 +131,7 @@ public class Search{
 		
 		try{
 		dbServiceURL=dbServiceURL+"/findFileNamesByVersion?searchurl="+urlID+"&version="+version;
-		System.out.println(dbServiceURL);
+		
 		URL obj = new URL(dbServiceURL);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		con.setRequestMethod("GET");
@@ -140,7 +140,7 @@ public class Search{
 		con.setRequestProperty("User-Agent", USER_AGENT);
 
 		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'GET' request to URL : " + url);
+		System.out.println("\nSending 'GET' request to URL : " + dbServiceURL);
 		System.out.println("Response Code : " + responseCode);
 
 		BufferedReader in = new BufferedReader(
@@ -155,6 +155,57 @@ public class Search{
 
 		ResultsPopulator res=new ResultsPopulator();
 		fileResults=res.populateResultforSearchRawUrl(response.toString());
+
+
+		}catch(IOException ef){
+			ef.printStackTrace();
+		}catch(Exception e){
+
+			e.printStackTrace();
+		}
+		return fileResults;
+	}
+
+	public String purgeAndKeep(String url,String toKeep){
+		String urls;
+	// // 	//TO DO
+	// 	try{
+	// 		urls=URLEncoder.encode(url, "UTF-8");
+	// 	// urls=java.net.URLDecoder.encode(url, "UTF-8");	
+	// }catch(UnsupportedEncodingException e){
+	// 	urls=url;
+	// }
+		System.out.println("Coming for purge");
+		String urlID = UUID.nameUUIDFromBytes(url.getBytes()).toString();
+		try{
+			dbServiceURL=dbServiceURL+"/findFileNames?searchurl="+urlID;
+		
+		URL obj = new URL(dbServiceURL);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+		con.setRequestMethod("GET");
+
+
+		con.setRequestProperty("User-Agent", USER_AGENT);
+
+		int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'GET' request to URL : " + dbServiceURL);
+		System.out.println("Response Code : " + responseCode);
+
+		BufferedReader in = new BufferedReader(
+		        new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+
+		//print result
+		// System.out.println(response.toString());
+		ResultsPopulator res=new ResultsPopulator();
+		System.out.println("Going inside Results");
+		fileResults=res.purgeAndKeep(response.toString(),toKeep);
 
 
 		}catch(IOException ef){

@@ -71,4 +71,14 @@ public class DataMonsterFileQueryService {
      
         return newSearch.searchRawVersion(url,version);
     }
+
+    @GET
+    @Path("purge")
+    @Produces(MediaType.TEXT_HTML)
+    public Response purgeFiles(@QueryParam("url")String url,
+                             @QueryParam("keeponlyrecent")String keeponlyrecent){
+        Search newSearch=new Search();
+        return Response.status(200).entity(newSearch.purgeAndKeep(url,keeponlyrecent)).build();
+        
+   }
 }

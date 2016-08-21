@@ -1,4 +1,4 @@
-package com.datamonster.services.filelistener;
+package com.datamonster.filelistener;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +18,18 @@ public class FileWatcher {
 	public String listenerActive="Y";
 	public WatchKey watchKey;	
 	public WatchService watcher;
+
+	public boolean purgeFile(String fileNameToPurge){
+
+		
+			File toBePurgedFile=new File(WATCH_FOLDER+"/"+fileNameToPurge);
+			return toBePurgedFile.delete();	
+			
+		
+		
+	}
+
+
 	public void startListening() {
 		Path watchDirectory = Paths.get(WATCH_FOLDER);
 //		this.listenerActive = "Y";
