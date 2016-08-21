@@ -8,14 +8,11 @@
 Please change the WATCH_FOLDER in com.datamonster.utils.DataMonsterQueryConstants 
 
 ```bash
-
-
 $ mvn clean test
 
 # To start the application
 $ mvn exec:java
-
-
+```
 The  services runs on port 8080 by default and you can query the data
 
 | API | Type | Operation |
@@ -28,7 +25,7 @@ The  services runs on port 8080 by default and you can query the data
 
 
 
-<hr />
+
 
 ### Problem Description
 
